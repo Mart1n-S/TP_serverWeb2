@@ -18,20 +18,21 @@ services:
       - db
     environment:
       HO: local
+    volumes:
+      - ./nginx/jwt/jwt-secret.key:/var/www/html/jwt/jwt-secret.key:ro
     networks:
       - donsecure-net
 
   nginx:
-    image: owasp/modsecurity-crs:nginx
+    build: ./nginx
     container_name: donsecure-nginx
     ports:
       - "443:443"
-    volumes:
-      - ./nginx/templates/conf.d/:/etc/nginx/templates/conf.d/:ro
-      - ./nginx/ssl:/etc/nginx/certs:ro
-      - ./nginx/jwt:/usr/share/nginx/html/jwt:ro
     depends_on:
       - apache
+    volumes:
+      - ./nginx/ssl:/etc/nginx/ssl:ro
+      - ./nginx/jwt/jwt-secret.key:/etc/nginx/jwt-secret.key:ro
     networks:
       - donsecure-net
 
