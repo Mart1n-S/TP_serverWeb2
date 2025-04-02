@@ -2,7 +2,6 @@
 require 'vendor/autoload.php';
 
 use Firebase\JWT\JWT;
-use Firebase\JWT\Key;
 
 $pseudo = $_POST['pseudo'] ?? null;
 if (!$pseudo) {
@@ -10,7 +9,7 @@ if (!$pseudo) {
     exit("Pseudo manquant");
 }
 
-$secret = "supersecret"; // identique au Lua côté NGINX
+$secret = trim(file_get_contents('/var/www/html/jwt/jwt-secret.key'));
 
 $payload = [
     "sub" => $pseudo,

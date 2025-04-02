@@ -18,6 +18,8 @@ services:
       - db
     environment:
       HO: local
+    volumes:
+      - ./nginx/jwt/jwt-secret.key:/var/www/html/jwt/jwt-secret.key:ro
     networks:
       - donsecure-net
 
@@ -28,6 +30,9 @@ services:
       - "443:443"
     depends_on:
       - apache
+    volumes:
+      - ./nginx/ssl:/etc/nginx/ssl:ro
+      - ./nginx/jwt/jwt-secret.key:/etc/nginx/jwt-secret.key:ro
     networks:
       - donsecure-net
 
