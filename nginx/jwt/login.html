@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Connexion DonSecure</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Bootstrap 5.3 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body class="bg-light d-flex align-items-center vh-100">
+
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-6 col-lg-4">
+                <div class="card shadow-lg">
+                    <div class="card-body">
+                        <h2 class="card-title text-center mb-4">🔐 Connexion DonSecure</h2>
+                        <p class="text-center">Veuillez vous connecter pour accéder à la plateforme.</p>
+
+                        <form id="loginForm">
+                            <div class="mb-3">
+                                <label for="pseudo" class="form-label">Pseudo :</label>
+                                <input type="text" class="form-control" id="pseudo" value="mitchou" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary w-100">Se connecter</button>
+                        </form>
+                    </div>
+                </div>
+                <p class="text-center mt-3 text-muted">© DonSecure 2025</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap 5.3 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        document.getElementById("loginForm").addEventListener("submit", function (event) {
+            event.preventDefault();
+            const pseudo = document.getElementById("pseudo").value;
+
+            const header = btoa(JSON.stringify({ alg: "HS256", typ: "JWT" }));
+            const payload = btoa(JSON.stringify({
+                sub: pseudo,
+                exp: Math.floor(Date.now() / 1000) + (30 * 60) // expire dans 30 min
+            }));
+            const fakeSignature = "donsimule123456789"; // signature factice
+
+            const jwt = `${header}.${payload}.${fakeSignature}`;
+            document.cookie = `auth_token=${jwt}; Path=/; Secure;`;
+
+            alert("Token généré ! Redirection en cours...");
+            window.location.href = "/";
+        });
+    </script>
+</body>
+
+</html>

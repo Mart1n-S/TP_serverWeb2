@@ -1,0 +1,44 @@
+services:
+  db:
+    build: ./postgreSQL
+    container_name: donsecure-db
+    environment:
+      POSTGRES_DB: authCB
+      POSTGRES_USER: authcb
+      POSTGRES_PASSWORD: authcb
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - donsecure-net
+
+  apache:
+    build: ./apache
+    container_name: donsecure-apache
+    depends_on:
+      - db
+    environment:
+      HO: local
+    networks:
+      - donsecure-net
+
+  nginx:
+    image: owasp/modsecurity-crs:nginx
+    container_name: donsecure-nginx
+    ports:
+      - "443:443"
+    volumes:
+      - ./nginx/templates/conf.d/:/etc/nginx/templates/conf.d/:ro
+      - ./nginx/ssl:/etc/nginx/certs:ro
+      - ./nginx/jwt:/usr/share/nginx/html/jwt:ro
+    depends_on:
+      - apache
+    networks:
+      - donsecure-net
+
+volumes:
+  pgdata:
+
+
+networks:
+  donsecure-net:
+    driver: bridge
