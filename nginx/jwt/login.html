@@ -15,20 +15,64 @@
                 <div class="card shadow-lg">
                     <div class="card-body">
                         <h2 class="card-title text-center mb-4">🔐 Connexion DonSecure</h2>
-                        <p class="text-center">Veuillez entrer votre pseudo :</p>
-                        <form id="loginForm" action="/generate_token.php" method="POST">
+                        <p class="text-center">Veuillez entrer vos identifiants :</p>
+
+                        <!-- Identifiants de test -->
+                        <div class="alert alert-info text-center small">
+                            <strong>🔑 Identifiants de test :</strong><br>
+                            Pseudo : <code>Martin</code> <br>
+                            Mot de passe : <code>123456</code>
+                        </div>
+
+                        <!-- Message d'erreur -->
+                        <div id="errorAlert" class="alert alert-danger d-none" role="alert"></div>
+
+                        <!-- Formulaire -->
+                        <form action="/generate_token.php" method="POST">
                             <div class="mb-3">
                                 <label for="pseudo" class="form-label">Pseudo :</label>
-                                <input type="text" name="pseudo" class="form-control" required>
+                                <input type="text" name="pseudo" id="pseudo" class="form-control" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="motdepasse" class="form-label">Mot de passe :</label>
+                                <input type="password" name="motdepasse" id="motdepasse" class="form-control" required>
                             </div>
                             <button type="submit" class="btn btn-primary w-100">Se connecter</button>
                         </form>
                     </div>
                 </div>
+
                 <p class="text-center mt-3 text-muted">© DonSecure 2025</p>
             </div>
         </div>
     </div>
+
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        const error = params.get("error");
+        const alert = document.getElementById("errorAlert");
+
+        if (error) {
+            alert.classList.remove("d-none");
+
+            switch (error) {
+                case "1":
+                    alert.textContent = "❌ Identifiants incorrects.";
+                    break;
+                case "missing":
+                    alert.textContent = "❌ Pseudo ou mot de passe manquant.";
+                    break;
+                case "method":
+                    alert.textContent = "❌ Méthode HTTP non autorisée.";
+                    break;
+                case "server":
+                    alert.textContent = "❌ Erreur interne du serveur. Veuillez réessayer.";
+                    break;
+                default:
+                    alert.textContent = "❌ Une erreur inconnue est survenue.";
+            }
+        }
+    </script>
 </body>
 
 </html>

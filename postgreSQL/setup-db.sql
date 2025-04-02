@@ -66,6 +66,17 @@ VALUES
 ('1234567890123456', '12/23', '123', '10', 'Michou'),
 ('6543210987654321', '11/24', '321', '10', 'squeezie');
 
--- Commit
-COMMIT;
+-- 9) Create users table (pseudo, mot_de_passe_hash)
+DROP TABLE IF EXISTS users;
 
+CREATE TABLE users (
+    id SERIAL PRIMARY KEY,
+    pseudo VARCHAR(255) UNIQUE NOT NULL,
+    mot_de_passe_hash VARCHAR(255) NOT NULL
+);
+
+-- Add a test user (mot de passe = 123456, hashé en bcrypt)
+INSERT INTO users (pseudo, mot_de_passe_hash)
+VALUES ('Martin', '$2b$12$Vz//pqQVQf21k4rdyU4SFuP1pcAQEmh74PFgHhiQQAEdIFDiR7MhW');
+
+COMMIT;
