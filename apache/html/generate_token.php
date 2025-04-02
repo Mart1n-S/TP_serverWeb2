@@ -3,6 +3,12 @@ require 'vendor/autoload.php';
 
 use Firebase\JWT\JWT;
 
+// Vérifie que la requête est bien en POST
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    http_response_code(405);
+    exit("Méthode non autorisée");
+}
+
 $pseudo = $_POST['pseudo'] ?? null;
 if (!$pseudo) {
     http_response_code(400);
