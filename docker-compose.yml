@@ -9,7 +9,7 @@ services:
     volumes:
       - pgdata:/var/lib/postgresql/data
     networks:
-      - donsecure-net
+      - backend-net
 
   apache:
     build: ./apache
@@ -22,12 +22,15 @@ services:
       - ./nginx/jwt/jwt-secret.key:/var/www/html/jwt/jwt-secret.key:ro
     networks:
       - donsecure-net
+      - backend-net
 
   nginx:
     build: ./nginx
     container_name: donsecure-nginx
     ports:
-      - "443:443"
+      # - "80:80"
+      - "8080:8080"
+      # - "443:443"
     depends_on:
       - apache
     volumes:
@@ -42,4 +45,6 @@ volumes:
 
 networks:
   donsecure-net:
+    driver: bridge
+  backend-net:
     driver: bridge
